@@ -1,0 +1,29 @@
+{
+  "name": "rticle",
+  "version": "1.0.0",
+  "description": "Rticle is a free blog website where users can create and publish thier blogs.",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon server"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/haridebl3/rticle.git"
+  },
+  "author": "Hariharan G",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/haridebl3/rticle/issues"
+  },
+  "homepage": "https://github.com/haridebl3/rticle#readme",
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "express": "^4.17.1",
+    "jsonwebtoken": "^8.5.1",
+    "lodash": "^4.17.21",
+    "mongodb": "^3.6.9",
+    "mongoose": "^5.12.12",
+    "nodemon": "^2.0.7"
+  }
+}
