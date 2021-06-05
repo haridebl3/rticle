@@ -1,22 +1,20 @@
 const bufferRoute = require("express").Router();
 const jwt = require("jsonwebtoken");
-const buffer = require("../models/BufferModel");
+const buffers = require("../models/BufferModel");
 const { authenticateUser } = require("../authentication");
-const mongoose = require("mongoose");
-const _ = require("lodash");
 
 bufferRoute.get("/", authenticateUser, async (req, res) => {
   if (req.user.role !== "admin") {
     res.status("403");
   }
-  res.status(200).json(await buffer.find({}));
+  res.status(200).json(await buffers.find({}));
 });
 
 bufferRoute.post("/", authenticateUser, async (req, res) => {
   var bufferArticle = req.body;
   bufferArticle.user = req.user.id;
 
-  await buffer.create(bufferArticle, (err) => {
+  await buffers.create(bufferArticle, (err) => {
     if (err) {
       res.send(err);
     }
@@ -26,7 +24,7 @@ bufferRoute.post("/", authenticateUser, async (req, res) => {
   });
 });
 bufferRoute.delete("/:id", authenticateUser, async (req, res) => {
-  await buffer.findByIdAndRemove(req.params.id, (err) => {
+  await buffers.findByIdAndRemove(req.params.id, (err) => {
     if (err) {
       res.send(err);
     }
