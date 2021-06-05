@@ -16,7 +16,8 @@ userRoute.post("/login", async (req, res) => {
 
   const accessToken = jwt.sign(
     { id: user._id, email: user.email, role: user.role },
-    process.env.JWT_SECRET
+    process.env.JWT_SECRET,
+    { expiresIn: '30m' }
   );
 
   res.json({
