@@ -67,4 +67,13 @@ articleRoute.get("/:id", async (req, res) => {
   res.status(200).json(article);
 });
 
+articleRoute.get("/", (req, res) => {
+  filter = req.query.filter;
+  articles.find({}, (err, article) => {
+    if (err) {
+      res.status(400).send("Error Fetching details");
+    }
+    res.status(200).send(article);
+  }).sort(filter);
+});
 module.exports = articleRoute;
