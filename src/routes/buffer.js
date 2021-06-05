@@ -5,7 +5,7 @@ const { authenticateUser } = require("../authentication");
 
 bufferRoute.get("/", authenticateUser, async (req, res) => {
   if (req.user.role !== "admin") {
-    res.status("403");
+    res.status(401).send("unauthorized");
   }
   res.status(200).json(await buffers.find({}));
 });
@@ -24,6 +24,9 @@ bufferRoute.post("/", authenticateUser, async (req, res) => {
   });
 });
 bufferRoute.delete("/:id", authenticateUser, async (req, res) => {
+  if (req.user.role !== "admin") {
+    res.status(401).send("unauthorized");
+  }
   await buffers.findByIdAndRemove(req.params.id, (err) => {
     if (err) {
       res.send(err);
