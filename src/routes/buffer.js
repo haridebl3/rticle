@@ -15,13 +15,15 @@ bufferRoute.get("/", authenticateUser, async (req, res) => {
 bufferRoute.post("/", authenticateUser, async (req, res) => {
   var bufferArticle = req.body;
   bufferArticle.user = req.user.id;
-  
-  await buffer
-    .create(bufferArticle)
-    .then(
-      res.status(201).send("Article is Posted and waiting for Admin approval")
-    )
-    .catch((err) => console.error(err));
+
+  await buffer.create(bufferArticle, (err) => {
+    if (err) {
+      res.send(err);
+    }
+    res
+      .status(201)
+      .send("Article posted successfully and waiting for admin approval");
+  });
 });
 
 module.exports = bufferRoute;

@@ -30,9 +30,11 @@ userRoute.post("/register", async (req, res) => {
     res.status(409).send("User already exists");
   }
   await users.create(req.body, (err) => {
-    if (err) throw err;
+    if (err) {
+      res.send(err);
+    }
+    res.status(201).send("User Created Successfully");
   });
-  res.status(201).send("User Created Successfully");
 });
 
 module.exports = userRoute;
