@@ -25,5 +25,13 @@ bufferRoute.post("/", authenticateUser, async (req, res) => {
       .send("Article posted successfully and waiting for admin approval");
   });
 });
+bufferRoute.delete("/:id", authenticateUser, async (req, res) => {
+  await buffer.findByIdAndRemove(req.params.id, (err) => {
+    if (err) {
+      res.send(err);
+    }
+    res.status(200).send("Article Deleted Successfully");
+  });
+});
 
 module.exports = bufferRoute;
