@@ -6,7 +6,9 @@ var UserSchema = new mongoose.Schema(
     lastName: { type: String, required: true },
     email: { type: String, unique: true, required: true },
     password: { type: String, required: true },
+    description: { type: String },
     role: { type: String, enum: ["blogger", "admin"], default: "blogger" },
+    imageUrl: { type: String },
   },
   { timestamps: true }
 );
