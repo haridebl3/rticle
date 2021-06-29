@@ -12,11 +12,11 @@ userRoute.post("/login", async (req, res) => {
   user = await users.findOne({ email: req.body.email });
 
   if (!user) {
-    res.status(404).send("User Not Found");
+    return res.status(404).json({ msg: "User Not Found" });
   }
 
   if (user.password !== req.body.password) {
-    res.status(401).send("Incorrect password");
+    return res.status(401).json({ msg: "Incorrect password" });
   }
 
   const accessToken = jwt.sign(
@@ -25,7 +25,7 @@ userRoute.post("/login", async (req, res) => {
     { expiresIn: "30m" }
   );
 
-  res.json({
+  return res.json({
     accessToken,
     email: user.email,
   });
@@ -33,19 +33,16 @@ userRoute.post("/login", async (req, res) => {
 
 userRoute.post("/register", upload.single("profileImage"), async (req, res) => {
   req.file ? (req.body.imageUrl = req.file.path) : (req.body.imageUrl = null);
+
   if (await users.findOne({ email: req.body.email })) {
-    res.status(409).send("User already exists");
+    return res.status(409).json({ msg: "User already exists" });
   }
   await users.create(req.body, (err) => {
     if (err) {
-      res.send(err);
+      return res.status(500).json({ msg: err });
     }
-    res.status(201).send("User Created Successfully");
+    return res.status(201).json({ msg: "User Created Successfully" });
   });
-});
-
-userRoute.get("/register", async (req, res) => {
-  res.status(200).json(await users.find({}));
 });
 
 module.exports = userRoute;

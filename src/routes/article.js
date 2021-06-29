@@ -6,20 +6,24 @@ const { authenticateUser } = require("../authentication");
 
 articleRoute.post("/approve", authenticateUser, async (req, res) => {
   if (req.user.role !== "admin") {
-    res.status(401).send("Unauthorized");
+    return res.status(status_codes.UNAUTHORIZED).json({ msg: "Unauthorized" });
   }
   bufferId = req.body.id;
   var buffer = await buffers
     .findById(bufferId, (err, buffer) => {
       if (err) {
-        res.status(404).send("Buffer Item Doesnot exist");
+        return res
+          .status(status_codes.NOT_FOUND)
+          .json({ msg: "Buffer Item Doesnot exist" });
       }
       return buffer;
     })
     .select({ createdAt: 0, updatedAt: 0, _id: 0, __v: 0 })
     .exec();
   if (!buffer) {
-    res.status(404).send("Buffered Article Not found");
+    return res
+      .status(status_codes.NOT_FOUND)
+      .json({ msg: "Buffered Article Not found" });
   }
 
   var bufferedArticle = (({
@@ -33,14 +37,18 @@ articleRoute.post("/approve", authenticateUser, async (req, res) => {
   bufferedArticle.views = 0;
   const article = await articles.create(bufferedArticle, (err, article) => {
     if (err) {
-      res.status(500).send("Cannot able to create article");
+      return res
+        .status(status_codes.INTERNAL_SERVER_ERROR)
+        .json({ msg: "Cannot able to create article" });
     }
     buffers.findByIdAndRemove(bufferId, (err) => {
       if (err) {
-        res.send("cannot remove article from buffer");
+        return res
+          .status(status_codes.INTERNAL_SERVER_ERROR)
+          .json({ msg: "cannot remove article from buffer" });
       }
-      res
-        .status(200)
+      return res
+        .status(status_codes.OK)
         .json({ id: article._id, msg: "Article approved successfully" });
     });
   });
@@ -49,31 +57,37 @@ articleRoute.post("/approve", authenticateUser, async (req, res) => {
 articleRoute.get("/:id", async (req, res) => {
   var article = await articles.findById(req.params.id, (err) => {
     if (err) {
-      res.send(err);
+      return res.status(status_codes.INTERNAL_SERVER_ERROR).json({ msg: err });
     }
   });
   if (!article) {
-    res.status(404).send("Article Not found");
+    return res
+      .status(status_codes.NOT_FOUND)
+      .json({ msg: "Article Not found" });
   }
   await articles.findByIdAndUpdate(
     req.params.id,
     { views: article.views + 1 },
     (err) => {
       if (err) {
-        res.send(err);
+        return res.status(INTERNAL_SERVER_ERROR).json({ msg: err });
       }
     }
   );
-  res.status(200).json(article);
+  return res.status(status_codes.OK).json(article);
 });
 
 articleRoute.get("/", (req, res) => {
   filter = req.query.filter;
-  articles.find({}, (err, article) => {
-    if (err) {
-      res.status(400).send("Error Fetching details");
-    }
-    res.status(200).send(article);
-  }).sort(filter);
+  articles
+    .find({}, (err, article) => {
+      if (err) {
+        return res
+          .status(status_codes.INTERNAL_SERVER_ERROR)
+          .json({ msg: "Error Fetching details" });
+      }
+      return res.status(status_codes.OK).json(article);
+    })
+    .sort(filter);
 });
 module.exports = articleRoute;
