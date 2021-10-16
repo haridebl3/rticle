@@ -5,6 +5,9 @@ const mongoose = require("mongoose");
 const _ = require("lodash");
 const multer = require("multer");
 const { storage, fileFilter } = require("../utils/multer");
+const { authenticateUser } = require("../authentication");
+
+const serverUrl = "http://localhost:4000";
 
 const upload = multer({ storage: storage, fileFilter });
 
@@ -32,7 +35,12 @@ userRoute.post("/login", async (req, res) => {
 });
 
 userRoute.post("/register", upload.single("profileImage"), async (req, res) => {
-  req.file ? (req.body.imageUrl = req.file.path) : (req.body.imageUrl = null);
+  req.file
+    ? (req.body.imageUrl = `${serverUrl}/images/${req.file.path
+        .split("/")
+        .slice()
+        .pop()}`)
+    : (req.body.imageUrl = null);
 
   if (await users.findOne({ email: req.body.email })) {
     return res.status(409).json({ msg: "User already exists" });
@@ -43,6 +51,25 @@ userRoute.post("/register", upload.single("profileImage"), async (req, res) => {
     }
     return res.status(201).json({ msg: "User Created Successfully" });
   });
+});
+
+userRoute.get("/user-info", authenticateUser, async (req, res) => {
+  const user = await users.findOne({ email: req.user.email });
+  if (user) {
+    return res.status(200).json({
+      firstName: user.firstName,
+      lastName: user.lastName,
+    });
+  }
+  return res.status(404);
+});
+
+userRoute.get("/profile-img", authenticateUser, async (req, res) => {
+  const user = await users.findOne({ email: req.user.email });
+  if (user) {
+    return res.status(200).send(user.imageUrl);
+  }
+  return res.status(404);
 });
 
 module.exports = userRoute;

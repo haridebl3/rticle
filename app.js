@@ -1,5 +1,6 @@
 const express = require("express");
 const bodyParser = require("body-parser");
+const path = require("path");
 const userRoute = require("./src/routes/user");
 const bufferRoute = require("./src/routes/buffer");
 const articles = require("./src/models/ArticleModel");
@@ -35,6 +36,7 @@ app.use(function (req, res, next) {
 app.use("/user", userRoute);
 app.use("/buffer", bufferRoute);
 app.use("/article", articleRoute);
+app.use("/images", express.static(path.join(__dirname, "src/images")));
 
 app.listen(port, () => {
   console.log(`Node server is listening on port ${port}`);
