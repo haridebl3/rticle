@@ -5,14 +5,14 @@ var ArticleSchema = new mongoose.Schema(
   {
     title: { type: String, required: true },
     author: { type: String, required: true },
-    content: { type: String, unique: true, required: true },
+    content: { type: String, required: true },
     coverPicUrl: { type: String, unique: true, required: true },
     category: {
       type: String,
-      enum: ["Food", "Travel", "Technology", "Others"],
+      enum: ["food", "travel", "technology", "others"],
       default: "Others",
     },
-    keywords: { type: Array, default: [] },
+    tags: { type: Array, default: [] },
     user: [{ type: Schema.Types.ObjectId, ref: "UserSchema" }],
     views: { type: Number, default: 0 },
   },

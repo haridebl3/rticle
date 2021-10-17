@@ -52,4 +52,8 @@ bufferRoute.delete("/:id", authenticateUser, async (req, res) => {
   });
 });
 
+bufferRoute.get("/getCount", async (req, res) => {
+  return res.status(200).json({ count: await buffers.countDocuments() });
+});
+
 module.exports = bufferRoute;

@@ -78,4 +78,8 @@ userRoute.get("/profile-img", authenticateUser, async (req, res) => {
   return res.status(404);
 });
 
+userRoute.get("/getCount", async (req, res) => {
+  return res.status(200).json({ count: await users.countDocuments() });
+});
+
 module.exports = userRoute;
