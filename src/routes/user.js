@@ -7,7 +7,7 @@ const multer = require("multer");
 const { storage, fileFilter } = require("../utils/multer");
 const { authenticateUser } = require("../authentication");
 
-const serverUrl = "http://localhost:4000";
+const serverUrl =process.env.SERVER_URL;
 
 const upload = multer({ storage: storage, fileFilter });
 
