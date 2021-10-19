@@ -38,5 +38,5 @@ app.use("/article", articleRoute);
 app.use("/images", express.static(path.join(__dirname, "src/images")));
 
 app.listen(process.env.PORT || 4000, () => {
-  console.log(`Node server is listening on port ${port}`);
+  console.log(`Node server is listening`);
 });
