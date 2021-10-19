@@ -8,6 +8,9 @@ const articleRoute = require("./src/routes/article");
 const port = process.env.PORT || 4000;
 const app = express();
 
+app.set("port", port || 4000);
+app.set("host", "localhost");
+
 app.use(bodyParser.json());
 var mongoose = require("mongoose");
 const connectionString = process.env.MONGO_URL;
