@@ -7,6 +7,16 @@ const articles = require("./src/models/ArticleModel");
 const articleRoute = require("./src/routes/article");
 const app = express();
 
+const corsOpts = {
+  origin: "*",
+
+  methods: ["GET", "POST"],
+
+  allowedHeaders: ["Content-Type"],
+};
+
+app.use(cors(corsOpts));
+
 app.use(bodyParser.json());
 var mongoose = require("mongoose");
 const connectionString = process.env.MONGO_URL;
