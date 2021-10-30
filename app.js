@@ -8,16 +8,6 @@ const articleRoute = require("./src/routes/article");
 const app = express();
 const cors = require("cors");
 
-const corsOpts = {
-  origin: "*",
-
-  methods: ["GET", "POST"],
-
-  allowedHeaders: ["Content-Type"],
-};
-
-app.use(cors(corsOpts));
-
 app.use(bodyParser.json());
 var mongoose = require("mongoose");
 const connectionString = process.env.MONGO_URL;
@@ -40,7 +30,7 @@ app.use(function (req, res, next) {
   res.header("Access-Control-Allow-Origin", "*");
   res.header(
     "Access-Control-Allow-Headers",
-    "x-access-token, Origin, Content-Type, Accept"
+    "x-access-token, Origin, Content-Type, Accept, Authorization"
   );
   next();
 });
