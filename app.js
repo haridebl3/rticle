@@ -6,6 +6,7 @@ const bufferRoute = require("./src/routes/buffer");
 const articles = require("./src/models/ArticleModel");
 const articleRoute = require("./src/routes/article");
 const app = express();
+const cors = require("cors");
 
 const corsOpts = {
   origin: "*",
