@@ -79,10 +79,14 @@ articleRoute.get("/", (req, res) => {
 });
 
 articleRoute.get("/latest", async (req, res) => {
-  console.log("REQ", req);
-
   res.json({
     articles: await articles.find().sort({ _id: -1 }).limit(3),
+  });
+});
+
+articleRoute.get("/trending", async (req, res) => {
+  res.json({
+    articles: await articles.find().sort({ views: -1 }).limit(3),
   });
 });
 
