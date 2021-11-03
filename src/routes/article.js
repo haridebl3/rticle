@@ -54,7 +54,6 @@ articleRoute.post("/approve", authenticateUser, async (req, res) => {
 });
 
 articleRoute.get("/read/:id", async (req, res) => {
-  console.log("REQ.PARAMS.ID", req.params.id);
   var article = await articles.findById(req.params.id, (err) => {
     if (err) {
       return res.status(500).json({ msg: err });

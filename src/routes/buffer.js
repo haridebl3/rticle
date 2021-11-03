@@ -5,6 +5,8 @@ const { authenticateUser } = require("../authentication");
 const multer = require("multer");
 const { storage, fileFilter } = require("../utils/multer");
 
+const sharp = require("sharp");
+
 const serverUrl = process.env.SERVER_URL;
 
 const upload = multer({ storage: storage, fileFilter });
@@ -21,6 +23,12 @@ bufferRoute.post(
   authenticateUser,
   upload.single("coverPicUrl"),
   async (req, res) => {
+    await sharp(req.file.path)
+      .resize(1920, 1080)
+      .jpeg({ quality: 90 })
+      .toFile(path.resolve(req.file.destination, "resized", image));
+    fs.unlinkSync(req.file.path);
+
     req.file
       ? (req.body.coverPicUrl = `${serverUrl}/images/${req.file.path
           .split("/")
