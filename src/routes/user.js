@@ -7,6 +7,7 @@ const multer = require("multer");
 const { storage, fileFilter } = require("../utils/multer");
 const { authenticateUser } = require("../authentication");
 const path = require("path");
+const fs = require("fs");
 
 const sharp = require("sharp");
 

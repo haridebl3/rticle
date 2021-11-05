@@ -4,7 +4,8 @@ const buffers = require("../models/BufferModel");
 const { authenticateUser } = require("../authentication");
 const multer = require("multer");
 const { storage, fileFilter } = require("../utils/multer");
-const path = require('path');
+const path = require("path");
+const fs = require("fs");
 
 const sharp = require("sharp");
 
@@ -27,7 +28,7 @@ bufferRoute.post(
     await sharp(req.file.path)
       .resize(1920, 1080)
       .jpeg({ quality: 90 })
-      .toFile(path.resolve(req.file.destination, "resized", image));
+      .toFile(path.resolve(req.file.destination, "resized"));
     fs.unlinkSync(req.file.path);
 
     req.file
