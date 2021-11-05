@@ -4,6 +4,7 @@ const buffers = require("../models/BufferModel");
 const { authenticateUser } = require("../authentication");
 const multer = require("multer");
 const { storage, fileFilter } = require("../utils/multer");
+const path = require('path');
 
 const sharp = require("sharp");
 

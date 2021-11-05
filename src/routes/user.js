@@ -6,6 +6,7 @@ const _ = require("lodash");
 const multer = require("multer");
 const { storage, fileFilter } = require("../utils/multer");
 const { authenticateUser } = require("../authentication");
+const path = require('path');
 
 const sharp = require("sharp");
 
