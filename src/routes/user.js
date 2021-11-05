@@ -6,10 +6,6 @@ const _ = require("lodash");
 const multer = require("multer");
 const { storage, fileFilter } = require("../utils/multer");
 const { authenticateUser } = require("../authentication");
-const path = require("path");
-const fs = require("fs");
-
-const sharp = require("sharp");
 
 const serverUrl = process.env.SERVER_URL;
 
@@ -45,12 +41,6 @@ userRoute.post("/login", async (req, res) => {
 });
 
 userRoute.post("/register", upload.single("profileImage"), async (req, res) => {
-  await sharp(req.file.path)
-    .resize(320, 320)
-    .jpeg({ quality: 90 })
-    .toFile(path.resolve(req.file.destination, "resized"));
-  fs.unlinkSync(req.file.path);
-
   req.file
     ? (req.body.imageUrl = `${serverUrl}/images/${req.file.path
         .split("/")
