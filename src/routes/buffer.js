@@ -2,12 +2,17 @@ const bufferRoute = require("express").Router();
 const jwt = require("jsonwebtoken");
 const buffers = require("../models/BufferModel");
 const { authenticateUser } = require("../authentication");
+const { uploadImage } = require("../utils/imageUpload");
 const multer = require("multer");
-const { storage, fileFilter } = require("../utils/multer");
 
 const serverUrl = process.env.SERVER_URL;
 
-const upload = multer({ storage: storage, fileFilter });
+const upload = multer({
+  storage: multer.memoryStorage(),
+  limits: {
+    fileSize: 10 * 1024 * 1024,
+  },
+});
 
 bufferRoute.get("/", authenticateUser, async (req, res) => {
   if (req.user.role !== "admin") {
@@ -22,11 +27,9 @@ bufferRoute.post(
   upload.single("coverPicUrl"),
   async (req, res) => {
     req.file
-      ? (req.body.coverPicUrl = `${serverUrl}/images/${req.file.path
-          .split("/")
-          .slice()
-          .pop()}`)
-      : (req.body.imageUrl = null);
+      ? (req.body.coverPicUrl = await uploadImage(req.file))
+      : (req.body.coverPicUrl = null);
+
     var bufferArticle = req.body;
     bufferArticle.user = req.user.id;
 

@@ -4,12 +4,15 @@ const users = require("../models/UserModel");
 const mongoose = require("mongoose");
 const _ = require("lodash");
 const multer = require("multer");
-const { storage, fileFilter } = require("../utils/multer");
+const { uploadImage } = require("../utils/imageUpload");
 const { authenticateUser } = require("../authentication");
 
-const serverUrl = process.env.SERVER_URL;
-
-const upload = multer({ storage: storage, fileFilter });
+const upload = multer({
+  storage: multer.memoryStorage(),
+  limits: {
+    fileSize: 10 * 1024 * 1024,
+  },
+});
 
 userRoute.post("/login", async (req, res) => {
   user = await users.findOne({ email: req.body.email });
@@ -42,10 +45,7 @@ userRoute.post("/login", async (req, res) => {
 
 userRoute.post("/register", upload.single("profileImage"), async (req, res) => {
   req.file
-    ? (req.body.imageUrl = `${serverUrl}/images/${req.file.path
-        .split("/")
-        .slice()
-        .pop()}`)
+    ? (req.body.imageUrl = await uploadImage(req.file))
     : (req.body.imageUrl = null);
 
   if (await users.findOne({ email: req.body.email })) {
