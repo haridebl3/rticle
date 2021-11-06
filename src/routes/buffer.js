@@ -5,8 +5,6 @@ const { authenticateUser } = require("../authentication");
 const { uploadImage } = require("../utils/imageUpload");
 const multer = require("multer");
 
-const serverUrl = process.env.SERVER_URL;
-
 const upload = multer({
   storage: multer.memoryStorage(),
   limits: {
