@@ -1,10 +1,13 @@
 const Cloud = require("@google-cloud/storage");
-const serviceKey = process.env.GCD_Service_Key;
 
 const { Storage } = Cloud;
 const gc = new Storage({
-  keyFilename: serviceKey,
   projectId: "rticle",
+  scopes: "https://www.googleapis.com/auth/cloud-platform",
+  credentials: {
+    client_email: process.env.GOOGLE_STORAGE_EMAIL,
+    private_key: process.env.GCD_Service_Key,
+  },
 });
 
 const bucket = gc.bucket("rticle");
@@ -25,7 +28,7 @@ const uploadImage = (file) =>
         resolve(publicUrl);
       })
       .on("error", () => {
-        reject(`Unable to upload image, something went wrong`);
+        console.log(`Unable to upload image, something went wrong`);
       })
       .end(buffer);
   });
