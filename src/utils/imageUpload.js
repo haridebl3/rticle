@@ -30,4 +30,4 @@ const uploadImage = (file) =>
       .end(buffer);
   });
 
-module.exports = uploadImage;
+module.exports = { uploadImage: uploadImage };
