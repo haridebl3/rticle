@@ -9,6 +9,8 @@ const gc = new Storage({
   },
   projectId: "rticle",
 });
+console.log("PROCESS.ENV.CLIENT_EMAIL", process.env.CLIENT_EMAIL);
+console.log("PROCESS.ENV.PRIVATE_KEY", process.env.PRIVATE_KEY);
 
 const bucket = gc.bucket("rticle-assets");
 
