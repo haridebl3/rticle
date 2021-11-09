@@ -1,16 +1,17 @@
 const Cloud = require("@google-cloud/storage");
+const { format } = require("util");
 
+const authJson = JSON.parse(process.env.GOOGLE_AUTH_KEY);
 const { Storage } = Cloud;
 const gc = new Storage({
-  projectId: "rticle",
-  scopes: "https://www.googleapis.com/auth/cloud-platform",
   credentials: {
-    client_email: process.env.GOOGLE_STORAGE_EMAIL,
-    private_key: process.env.GCD_Service_Key,
+    private_key: authJson.private_key,
+    client_email: authJson.client_email,
   },
+  projectId: "rticle",
 });
 
-const bucket = gc.bucket("rticle");
+const bucket = gc.bucket("rticle-assets");
 
 const uploadImage = (file) =>
   new Promise((resolve, reject) => {
@@ -27,8 +28,9 @@ const uploadImage = (file) =>
         );
         resolve(publicUrl);
       })
-      .on("error", () => {
-        console.log(`Unable to upload image, something went wrong`);
+      .on("error", (err) => {
+        console.log(`Unable to upload image, something went wrong`, err);
+        reject();
       })
       .end(buffer);
   });
