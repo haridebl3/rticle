@@ -1,12 +1,11 @@
 const Cloud = require("@google-cloud/storage");
 const { format } = require("util");
 
-const authJson = JSON.parse(process.env.GOOGLE_AUTH_KEY);
 const { Storage } = Cloud;
 const gc = new Storage({
   credentials: {
-    private_key: authJson.private_key,
-    client_email: authJson.client_email,
+    private_key: process.env.PRIVATE_KEY,
+    client_email: process.env.CLIENT_EMAIL,
   },
   projectId: "rticle",
 });
